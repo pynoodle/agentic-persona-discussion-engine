@@ -1,5 +1,7 @@
 # 🤖 PersonaBot - 멀티 에이전트 토론 시스템
 
+> **Built:** October 2025
+
 실제 사용자 리뷰 데이터 기반 페르소나 멀티 에이전트 토론 시스템
 
 **AutoGen + LangChain 기반**
