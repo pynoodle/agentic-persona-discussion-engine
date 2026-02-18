@@ -376,6 +376,49 @@ Bot: [가성비 추구자 페르소나 활성화]
 
 ---
 
+## 🤖 Multi-Agent Orchestration
+
+AutoGen 기반으로 7개 페르소나 에이전트가 구조화된 절차에 따라 토론을 진행합니다.
+
+| 컴포넌트 | 구현 내용 |
+|----------|-----------|
+| **Facilitator Agent** | `AssistantAgent` 기반 패시브 퍼실리테이터 — 라운드 안건 제시 및 투표 프롬프트 생성 |
+| **Persona Agents** | 고객 4명 + 직원 3명, 각자 독립 system prompt와 RAG 지식 베이스 보유 |
+| **Debate Mode 1** | `DebateSystem` — `MaxMessageTermination(rounds × agents × 2)`으로 발화 수 제한 |
+| **Debate Mode 2** | `DeepDebateSystem` — 5단계 페이즈(Phase I~V), 페이즈별 라운드 수 명시 제어 |
+| **Voting Mechanism** | 라운드 종료 후 각 에이전트가 1~5점 투표 → 가중 평균 산출 → 60% 이상(3.0/5.0) 시 가결 |
+| **Structured Output** | 모든 이벤트(start / message / vote / complete)를 JSON 스트림으로 emit |
+
+```python
+# 종료 조건 예시 (debate_system.py)
+MaxMessageTermination(max_messages=num_rounds * len(participants) * 2)
+# 3라운드 × 3에이전트 × 2 = 최대 18개 메시지
+```
+
+## 🛡️ Stability Mechanisms
+
+실제 구현된 안정성 장치:
+
+| 항목 | 구현 내용 |
+|------|-----------|
+| **Max Iteration Limit** | `MaxMessageTermination` — 라운드·참여자 수 기반 동적 메시지 상한 (`debate_system.py:91`) |
+| **Phase-based Control** | DeepDebateSystem은 5개 페이즈 × 명시적 라운드 수로 무한 루프 방지 (`deep_debate_system.py:29-60`) |
+| **Consensus Threshold** | 가중 평균 ≥ 3.0 (5점 척도의 60%)일 때 가결, 결과를 `passed` 플래그로 반환 (`voting_system.py:32`) |
+| **Conflict-aware Facilitation** | `simple_chat/facilitator.py`에서 turn count와 conflict 여부로 토론 페이즈 자동 전환 (opening → discussion → conflict → synthesis → conclusion) |
+| **RAG Grounding** | 각 에이전트 응답에 실제 사용자 댓글 데이터(40,377개) 기반 컨텍스트 주입으로 hallucination 억제 |
+
+## ⚠️ Failure Handling
+
+| 항목 | 구현 내용 |
+|------|-----------|
+| **Session Timeout** | 30분 세션 타임아웃 — 장시간 비활성 시 자동 종료 (`app_gradio.py:48`) |
+| **Agent Error Fallback** | 에이전트 응답 실패 시 try/catch로 포착 후 안전 메시지 반환 (`deep_debate_system.py:170-174`) |
+| **Vote Score Validation** | 투표 점수 1~5 범위 벗어날 시 즉시 reject (`voting_system.py:158-160`) |
+| **Stream Termination Guard** | `StopAsyncIteration` 예외 처리로 스트림 비정상 종료 시 debate 루프 안전하게 탈출 (`app_gradio.py:533-535`) |
+| **Message Attribute Check** | 수신 메시지의 `source` / `content` 속성 존재 여부 검증 후 처리 (`debate_system.py:122`) |
+
+---
+
 ## 📚 사용 예시
 
 ### 토론 실행
