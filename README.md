@@ -3,6 +3,14 @@
 > **Built:** October 2025
 
 실제 사용자 리뷰 데이터 기반 멀티 에이전트 토론 시스템 — AutoGen + LangChain RAG로 7개 페르소나 에이전트가 구조화된 토론을 자동 진행합니다.
+> **YouTube 댓글 40,377개 기반 7개 페르소나 에이전트가 AutoGen으로 자동 토론 + 투표로 의사결정**  
+> Multi-agent orchestration with RAG grounding · MaxMessageTermination safety control · Consensus voting threshold (≥3.0/5.0)
+
+![Python](https://img.shields.io/badge/Python-3.x-blue?logo=python)
+![AutoGen](https://img.shields.io/badge/AutoGen-Multi--Agent-0078D4?logo=microsoft)
+![LangChain](https://img.shields.io/badge/LangChain-RAG-1C3C3C?logo=langchain)
+![OpenAI](https://img.shields.io/badge/OpenAI-GPT--4o--mini-412991?logo=openai)
+![Gradio](https://img.shields.io/badge/Gradio-Web_UI-orange?logo=gradio)
 
 ---
 
