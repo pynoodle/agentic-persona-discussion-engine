@@ -42,3 +42,14 @@ logs/
 # OS
 .DS_Store
 Thumbs.db
+
+# Vector stores (auto-generated binary files)
+rag/vector_stores/
+rag/vector_stores_new/
+rag/vector_stores_real_reviews/
+
+# Runtime data
+simple_chat/data/
+analysis/
+logs/
+*.db

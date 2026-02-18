@@ -1,2 +1,2 @@
-web: python app_gradio.py
+web: python app.py
 
