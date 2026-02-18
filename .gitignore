@@ -1,0 +1,44 @@
+# Python
+__pycache__/
+*.py[cod]
+*$py.class
+*.so
+.Python
+env/
+venv/
+ENV/
+
+# Environment
+.env
+.env.local
+
+# IDE
+.vscode/
+.idea/
+*.swp
+*.swo
+
+# Data files (sensitive / large)
+data/
+simple_chat/data/
+*.json
+*.docx
+*.xlsx
+*.csv
+
+# Vector stores (large binary files)
+rag/vector_stores/
+rag/vector_stores_new/
+rag/vector_stores_real_reviews/
+
+# Logs and databases
+*.log
+logs/
+*.db
+
+# Executables
+*.exe
+
+# OS
+.DS_Store
+Thumbs.db
